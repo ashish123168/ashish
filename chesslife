@@ -1,0 +1,79 @@
+def create_board():
+    board = []
+    for i in range(8):
+        row = []
+        for j in range(8):
+            row.append(" ")
+        board.append(row)
+    return board
+
+def place_pieces(board):
+    # Place pawns
+    for i in range(8):
+        board[1][i] = "P"
+        board[6][i] = "p"
+
+    # Place knights
+    board[0][1] = "N"
+    board[0][6] = "N"
+    board[7][1] = "n"
+    board[7][6] = "n"
+
+    # Place bishops
+    board[0][2] = "B"
+    board[0][5] = "B"
+    board[7][2] = "b"
+    board[7][5] = "b"
+
+    # Place rooks
+    board[0][0] = "R"
+    board[0][7] = "R"
+    board[7][0] = "r"
+    board[7][7] = "r"
+
+    # Place queens
+    board[0][3] = "Q"
+    board[7][3] = "q"
+
+    # Place kings
+    board[0][4] = "K"
+    board[7][4] = "k"
+def display_board(board):
+    for row in board:
+        print(" ".join(row))
+
+        def validate_move(move, board):
+            if move.piece.lower() == "p":  # pawn move
+                # Check if move is forward
+                if move.direction[0] == 0 and move.direction[1]!= 0:
+                    # Check if there's a piece in the way
+                    if move.direction[1] > 0:
+                        for i in range(1, move.direction[1]):
+                            if board[move.start[0] + i][move.start[1] + i] != " ":
+                                return False
+                    else:
+                        for i in range(1, abs(move.direction[1])):
+                            if board[move.start[0] - i][move.start[1] - i] != " ":
+                                return False
+                    return True
+
+        return False
+
+    def move_piece(move, board):
+        if validate_move(move, board):
+            board[move.end[0]][move.end[1]] = move.piece
+            board[move.start[0]][move.start[1]] = " "
+
+            def play_game():
+                board = create_board()
+                place_pieces(board)
+                display_board(board)
+
+                # Get user input for the move
+                start = tuple(map(int, input("Enter start position (e.g., 12): ").split()))
+                end = tuple(map(int, input("Enter end position (e.g., 12): ").split()))
+                piece = input("Enter piece to move (e.g., P): ")
+
+                move = Move(start, end, piece)
+                move_piece(move, board)
+                display_board(board)
